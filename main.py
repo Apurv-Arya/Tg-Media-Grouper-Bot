@@ -19,8 +19,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "your last file to group them all automatically for you."
     )
 
-async def process_and_send_albums(chat_id: int, user_id: int, context: ContextTypes.DEFAULT_TYPE):
+async def process_and_send_albums(context: ContextTypes.DEFAULT_TYPE):
     """Processes the user's queue and sends all media in albums of 10."""
+    job = context.job
+    user_id = job.user_id
+    chat_id = job.chat_id
+
     if user_id in user_media_sessions:
         media_queue = user_media_sessions[user_id]['media']
         
@@ -53,9 +57,9 @@ async def handle_media(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     if user_id not in user_media_sessions:
         user_media_sessions[user_id] = {'media': [], 'timer': None}
     
-    # If a timer is already running, cancel it to reset the countdown
+    # If a timer is already running, remove it to reset the countdown
     if user_media_sessions[user_id]['timer']:
-        user_media_sessions[user_id]['timer'].cancel()
+        user_media_sessions[user_id]['timer'].schedule_removal()
         
     # Determine the media type and add it to the queue
     if update.message.photo:
@@ -64,14 +68,16 @@ async def handle_media(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     elif update.message.video:
         file_id = update.message.video.file_id
         user_media_sessions[user_id]['media'].append(InputMediaVideo(media=file_id))
-    elif update.message.animation: # <-- This is the new part for GIFs
+    elif update.message.animation:
         file_id = update.message.animation.file_id
         user_media_sessions[user_id]['media'].append(InputMediaAnimation(media=file_id))
         
     # Set a new timer. The bot will wait 2.5 seconds after the last file is received.
     user_media_sessions[user_id]['timer'] = context.job_queue.run_once(
-        lambda ctx: process_and_send_albums(chat_id, user_id, context), 
-        2.5
+        process_and_send_albums, 
+        2.5,
+        chat_id=chat_id,
+        user_id=user_id
     )
 
 def main() -> None:
