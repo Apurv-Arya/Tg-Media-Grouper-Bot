@@ -10,4 +10,4 @@ load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 if not BOT_TOKEN:
-    raise ValueError("No TELEGRAM_BOT_TOKEN found. Please set it in your .env file.")
+    raise ValueError("No BOT_TOKEN found. Please set it in your .env file.")

@@ -59,7 +59,7 @@ async def send_media_group_after_delay(update: Update, context: ContextTypes.DEF
 def main() -> None:
     """Starts the bot."""
     # Create the Application and pass it your bot's token.
-    application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+    application = Application.builder().token(BOT_TOKEN).build()
 
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
