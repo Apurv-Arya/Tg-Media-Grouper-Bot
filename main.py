@@ -3,7 +3,7 @@ from telegram import Update, InputMediaPhoto, InputMediaVideo, InputMediaAnimati
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 # Import the token from your config file
-from config import TELEGRAM_BOT_TOKEN
+from config import BOT_TOKEN
 
 # This dictionary will store user media and their associated timers.
 # The key is the user's ID.
@@ -77,7 +77,7 @@ async def handle_media(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 def main() -> None:
     """Starts the bot."""
     # Create the Application and pass it your bot's token.
-    application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+    application = Application.builder().token(BOT_TOKEN).build()
 
     # Add handlers for commands
     application.add_handler(CommandHandler("start", start))
