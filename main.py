@@ -1,10 +1,8 @@
 import asyncio
+from config import BOT_TOKEN
 from telegram import Bot, Update, InputMediaPhoto
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
-# --- Configuration ---
-# Replace 'YOUR_TELEGRAM_BOT_TOKEN' with the token you get from BotFather
-TELEGRAM_BOT_TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN'
 
 # This dictionary will store user media. The key is the user's ID.
 # The value is another dictionary containing a list of media and a timer.
